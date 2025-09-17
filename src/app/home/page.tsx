@@ -1,32 +1,30 @@
-import Image from "next/image";
+import { PokemonList } from "./_components/PokemonList";
 
-interface Photo {
-  albumId: number;
+export interface Pokemon {
   id: number;
-  title: string;
-  url: string;
+  name: string;
+  image: string;
 }
 
 export default async function Home() {
-
-  const response = await fetch("https://jsonplaceholder.typicode.com/photos");
-  const photos: Photo[] = await response.json();
-  const imagePhotos: Photo[] = photos.map((photo) => ({
-    ...photo, url: "https://picsum.photos/seed/picsum/200/300"
-  }));
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon");
+  const data = await response.json();
+  
+  const pokemones: Pokemon[] = await Promise.all(
+    data.results.map(async (pokemon: { name: string; url: string }) => {
+      const pokemonResponse = await fetch(pokemon.url);
+      const pokemonData = await pokemonResponse.json();
+      return {
+        id: pokemonData.id,
+        name: pokemon.name,
+        image: pokemonData.sprites.other.dream_world.front_default,
+      };
+    })
+  );
 
   return (
     <div>
-      <h1>Home Page</h1>
-      <h2>Photos List</h2>
-        {
-          imagePhotos.map((imagePhoto) => (
-            <div key={imagePhoto.id}>
-              <Image src={imagePhoto.url} alt={imagePhoto.title} width={150} height={150} />
-              <p>{imagePhoto.title}</p>
-            </div>
-          ))
-        }
+      <PokemonList pokemonList={pokemones} />
     </div>
-  )
+  );
 }
