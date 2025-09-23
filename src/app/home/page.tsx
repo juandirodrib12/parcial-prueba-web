@@ -1,4 +1,4 @@
-import { PokemonList } from "./_components/PokemonList";
+import { PokemonList } from "./_components/PokemonGrid";
 
 export interface Pokemon {
   id: number;
