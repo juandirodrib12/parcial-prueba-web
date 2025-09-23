@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm , SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 import { Pokemon } from '../page';
+import { toast } from 'sonner';
 
 const pokemonFormSchema = z.object({
     name: z.string().min(5).max(30),
@@ -29,6 +30,7 @@ export function PokemonForm( { addPokemon }: { addPokemon: (pokemon: Pokemon) =>
             image: data.image
         };
         addPokemon(pokemon);
+        toast.success(`${pokemon.name} agregado con exito`);
         reset();
     };
 

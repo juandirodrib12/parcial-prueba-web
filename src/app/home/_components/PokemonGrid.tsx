@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { PokemonDetail } from './PokemonDetail'; 
 import { Pokemon } from '../page';
 import { PokemonForm } from './PokemonForm';
+import { toast } from 'sonner';
 
 export const PokemonList = ({ pokemonList }: { pokemonList: Pokemon[] }) => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
@@ -34,6 +35,7 @@ export const PokemonList = ({ pokemonList }: { pokemonList: Pokemon[] }) => {
                     const updatedFavorites = [...favorites, pokemon];
                     setFavorites(updatedFavorites);
                     localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+                    toast.success(`${pokemon.name} agregado a favoritos`);
                   }}
                   removeFavorite={() => {}}
                 />
@@ -57,6 +59,7 @@ export const PokemonList = ({ pokemonList }: { pokemonList: Pokemon[] }) => {
                   const updatedFavorites = favorites.filter(favorite => favorite.id !== pokemon.id);
                   setFavorites(updatedFavorites);
                   localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+                  toast.info(`${pokemon.name} eliminado de favoritos`);
                 }}
                 />
               ))}
